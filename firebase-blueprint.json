@@ -1,0 +1,102 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile and reflection preferences",
+      "type": "object",
+      "properties": {
+        "displayName": { "type": "string", "description": "Display name of the user" },
+        "email": { "type": "string", "format": "email", "description": "User email address" },
+        "photoURL": { "type": "string", "description": "Profile picture URL" },
+        "themePreference": { "type": "string", "enum": ["dark", "light", "system"], "description": "UI theme preference" },
+        "moodAnalysisEnabled": { "type": "boolean", "description": "Whether mood analysis is enabled" },
+        "dailyPromptEnabled": { "type": "boolean", "description": "Whether daily reflection prompts are enabled" },
+        "streakDays": { "type": "integer", "description": "Current reflection streak in days" },
+        "longestStreak": { "type": "integer", "description": "Longest reflection streak achieved" },
+        "lastReflectedDate": { "type": "string", "description": "ISO date string of last reflection" },
+        "createdAt": { "type": "string", "description": "ISO date string of creation" },
+        "updatedAt": { "type": "string", "description": "ISO date string of last update" }
+      },
+      "required": ["email", "createdAt"]
+    },
+    "JournalSession": {
+      "title": "JournalSession",
+      "description": "A journaling session with reflections and Gemini conversation",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Title of the journal session" },
+        "summary": { "type": "string", "description": "AI-generated structured session summary" },
+        "mood": { "type": "string", "description": "Detected mood or theme" },
+        "confidence": { "type": "string", "enum": ["Low", "Medium", "High"], "description": "Mood detection confidence level" },
+        "messageCount": { "type": "integer", "description": "Total number of messages in the session" },
+        "isFavorite": { "type": "boolean", "description": "Whether session is bookmarked as favorite" },
+        "tags": { "type": "string", "description": "Comma-separated topics or tags" },
+        "createdAt": { "type": "string", "description": "ISO date string or Firestore timestamp" },
+        "updatedAt": { "type": "string", "description": "ISO date string or Firestore timestamp" }
+      },
+      "required": ["title", "createdAt", "updatedAt"]
+    },
+    "JournalMessage": {
+      "title": "JournalMessage",
+      "description": "A message turn within a journal session",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "assistant"], "description": "Sender role" },
+        "content": { "type": "string", "description": "Text content of the message" },
+        "model": { "type": "string", "description": "Gemini model used if assistant" },
+        "mode": { "type": "string", "enum": ["Reflect", "Brainstorm", "Summarize", "Solve a Problem", "Plan", "Ask Gemini"], "description": "AI interaction mode" },
+        "createdAt": { "type": "string", "description": "ISO date string or Firestore timestamp" }
+      },
+      "required": ["role", "content", "createdAt"]
+    },
+    "Goal": {
+      "title": "Goal",
+      "description": "User personal or reflection goal",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Goal title" },
+        "description": { "type": "string", "description": "Goal description" },
+        "status": { "type": "string", "enum": ["active", "completed"], "description": "Status of the goal" },
+        "progress": { "type": "integer", "description": "Percentage progress from 0 to 100" },
+        "createdAt": { "type": "string", "description": "ISO date string or Firestore timestamp" },
+        "updatedAt": { "type": "string", "description": "ISO date string or Firestore timestamp" }
+      },
+      "required": ["title", "status", "progress", "createdAt", "updatedAt"]
+    },
+    "SavedInsight": {
+      "title": "SavedInsight",
+      "description": "A highlighted insight or quote saved by the user",
+      "type": "object",
+      "properties": {
+        "content": { "type": "string", "description": "Text content of the insight" },
+        "sessionId": { "type": "string", "description": "ID of the source session if applicable" },
+        "sessionTitle": { "type": "string", "description": "Title of the source session" },
+        "category": { "type": "string", "description": "Category or topic" },
+        "createdAt": { "type": "string", "description": "ISO date string or Firestore timestamp" }
+      },
+      "required": ["content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}/profile/default": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Profile and preferences of the authenticated user"
+    },
+    "/users/{uid}/sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/JournalSession" },
+      "description": "Journal sessions created by the user"
+    },
+    "/users/{uid}/sessions/{sessionId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/JournalMessage" },
+      "description": "Messages exchanged in a journal session"
+    },
+    "/users/{uid}/goals/{goalId}": {
+      "schema": { "$ref": "#/entities/Goal" },
+      "description": "User goals and progress tracking"
+    },
+    "/users/{uid}/savedInsights/{insightId}": {
+      "schema": { "$ref": "#/entities/SavedInsight" },
+      "description": "Saved quotes and insights favorited by the user"
+    }
+  }
+}
