@@ -270,30 +270,6 @@ Ensure your development machine has the following tools installed:
 
 ---
 
-### Environment Configuration
-
-1. **Create the local environment file**:
-   ```bash
-   cp .env.example .env
-   ```
-
-2. **Fill in your credentials**:
-   - `GEMINI_API_KEY`: Obtain a free API key from [Google AI Studio](https://aistudio.google.com/).
-   - `VITE_FIREBASE_*`: Retrieve credentials from your Firebase Console project settings:
-     ```env
-     GEMINI_API_KEY="AIzaSyYourGeminiApiKeyHere"
-     GEMINI_MODEL="gemini-3.6-flash"
-
-     VITE_FIREBASE_API_KEY="AIzaSyYourFirebaseWebApiKey"
-     VITE_FIREBASE_AUTH_DOMAIN="your-project-id.firebaseapp.com"
-     VITE_FIREBASE_PROJECT_ID="your-project-id"
-     VITE_FIREBASE_STORAGE_BUCKET="your-project-id.appspot.com"
-     VITE_FIREBASE_MESSAGING_SENDER_ID="123456789012"
-     VITE_FIREBASE_APP_ID="1:123456789012:web:abcdef123456"
-     ```
-
----
-
 ### Running the Local Server
 
 Start the unified development server:
